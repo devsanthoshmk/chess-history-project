@@ -1,7 +1,7 @@
 import { Chess } from "chess.js";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { Chessboard } from "react-chessboard";
-import { Undo2, RotateCcw, Swords, Crown, Shield, Clock, ChevronLeft, ChevronRight, Save, Database, Settings, X, Play, Rewind, FastForward } from "lucide-react";
+import { RotateCcw, Swords, Crown, Shield, Clock, ChevronLeft, ChevronRight, Save, Database, Settings, X, Rewind, FastForward } from "lucide-react";
 
 // ─── Piece image map ────────────────────────────────────────────────────────
 const PIECE_MAP: Record<string, string> = {
@@ -172,14 +172,6 @@ export default function HistoryChess() {
         }
     };
 
-    const goStart = () => setViewIndex(-1); // Wait, start is -1? No, start is before first move.
-    // For start, it's actually an empty board. -empty implies index -1 but wait, let's use -2? We can just use -1 for LIVE, and 0 to (len-1) for moves. 
-    // Actually simpler: if len==0, live. If len>0, 0 is first move. -1 will be custom for "initial state" if viewIndex !== live.
-    // To simplify: let's stick to live = -1. Start = no moves. But our view logic expects viewIndex >= 0. Let's adjust viewingGame useMemo:
-    // Actually viewIndex = null/undefined or moveHistory.length-1 for live.
-    // Let's use viewIndex = -1 as LIVE. We won't support going to completely empty board if we don't have to, or wait, if viewIndex < 0 and live is false... let's just use `g.load()` for before first move.
-
-    const goFastPrev = () => setViewIndex(-1); // To fix it properly, viewIndex can be `null` for live. Let's use `null`.
 
     const isLive = viewIndex === -1;
     const isWhiteTurn = viewingGame.turn() === "w";
