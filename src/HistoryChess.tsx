@@ -1,7 +1,7 @@
 import { Chess } from "chess.js";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { Chessboard } from "react-chessboard";
-import { RotateCcw, Swords, Crown, Shield, Clock, ChevronLeft, ChevronRight, Save, Database, Settings, X, Rewind, FastForward } from "lucide-react";
+import { RotateCcw, Swords, Crown, Shield, Clock, ChevronLeft, ChevronRight, Save, Database, Settings, X, Rewind, FastForward, Info } from "lucide-react";
 
 // ─── Piece image map ────────────────────────────────────────────────────────
 const PIECE_MAP: Record<string, string> = {
@@ -46,7 +46,7 @@ export default function HistoryChess() {
     const [viewIndex, setViewIndex] = useState(-1);
 
     // UI Modals
-    const [activeModal, setActiveModal] = useState<"none" | "settings" | "load">("none");
+    const [activeModal, setActiveModal] = useState<"none" | "settings" | "load" | "about">("about");
     const [savedMatches, setSavedMatches] = useState<any[]>([]);
 
     useEffect(() => {
@@ -201,6 +201,9 @@ export default function HistoryChess() {
                 padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0
             }}>
                 <div style={{ display: 'flex', gap: '15px' }}>
+                    <button onClick={() => setActiveModal("about")} className="icon-btn" title="About">
+                        <Info size={18} color="#c89b3c" />
+                    </button>
                     <button onClick={() => setActiveModal("settings")} className="icon-btn" title="Settings">
                         <Settings size={18} color="#c89b3c" />
                     </button>
@@ -358,9 +361,54 @@ export default function HistoryChess() {
                         background: '#1a1208', border: '2px solid #5c3d00', borderRadius: 12,
                         width: '90%', maxWidth: 400, padding: 24, position: 'relative'
                     }}>
-                        <button onClick={() => setActiveModal("none")} style={{ position: 'absolute', top: 12, right: 12, background: 'transparent', border: 'none', color: '#c89b3c', cursor: 'pointer' }}>
+                        <button onClick={() => setActiveModal("none")} style={{ position: 'absolute', top: 12, right: 12, background: 'transparent', border: 'none', color: '#c89b3c', cursor: 'pointer', zIndex: 10 }}>
                             <X size={20} />
                         </button>
+
+                        {activeModal === "about" && (
+                            <div style={{ textAlign: "center", padding: "10px 0" }}>
+                                <h3 style={{ color: '#c89b3c', marginTop: 0, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: "center", gap: 10, letterSpacing: "2px", textTransform: "uppercase" }}>
+                                    <Info size={24} /> Credits
+                                </h3>
+                                <div style={{
+                                    background: "linear-gradient(145deg, #1c140a, #231808)",
+                                    border: "1px solid #5c3d00",
+                                    borderRadius: "12px",
+                                    padding: "30px 20px",
+                                    boxShadow: "inset 0 0 20px rgba(0,0,0,0.8), 0 4px 15px rgba(0,0,0,0.5)",
+                                    position: "relative",
+                                    overflow: "hidden"
+                                }}>
+                                    {/* Decorative corners */}
+                                    <div style={{ position: "absolute", top: 0, left: 0, width: 20, height: 20, borderTop: "2px solid #c89b3c", borderLeft: "2px solid #c89b3c", borderTopLeftRadius: 10 }} />
+                                    <div style={{ position: "absolute", top: 0, right: 0, width: 20, height: 20, borderTop: "2px solid #c89b3c", borderRight: "2px solid #c89b3c", borderTopRightRadius: 10 }} />
+                                    <div style={{ position: "absolute", bottom: 0, left: 0, width: 20, height: 20, borderBottom: "2px solid #c89b3c", borderLeft: "2px solid #c89b3c", borderBottomLeftRadius: 10 }} />
+                                    <div style={{ position: "absolute", bottom: 0, right: 0, width: 20, height: 20, borderBottom: "2px solid #c89b3c", borderRight: "2px solid #c89b3c", borderBottomRightRadius: 10 }} />
+
+                                    <p style={{ color: "#e8dcc8", fontSize: "1.4rem", fontWeight: "bold", margin: "0 0 15px 0", letterSpacing: "1px", textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>
+                                        Name: Janaki
+                                    </p>
+
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", margin: "15px 0" }}>
+                                        <div style={{ height: "1px", flex: 1, background: "linear-gradient(90deg, transparent, #c89b3c)" }}></div>
+                                        <Swords size={16} color="#c89b3c" style={{ margin: "0 10px" }} />
+                                        <div style={{ height: "1px", flex: 1, background: "linear-gradient(270deg, transparent, #c89b3c)" }}></div>
+                                    </div>
+
+                                    <p style={{ color: "#b8a070", fontSize: "1.2rem", margin: "15px 0" }}>
+                                        Department of History
+                                    </p>
+
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", margin: "15px 0" }}>
+                                        <div style={{ height: "1px", width: "40px", background: "#5c3d00" }}></div>
+                                    </div>
+
+                                    <p style={{ color: "#c89b3c", fontSize: "1.1rem", margin: "0", fontStyle: "italic", letterSpacing: "0.5px" }}>
+                                        South India ICA2.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
 
                         {activeModal === "settings" && (
                             <div>
